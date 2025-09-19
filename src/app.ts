@@ -1,11 +1,13 @@
-const express = require("express");
-const path = require("path");
-const fileRoutes = require("./routes/files");
-const morgan = require("morgan");
-const moment = require("moment-timezone");
+import express, { NextFunction, Request, Response } from "express";
+import path from "path";
+import fileRoutes from "./routes/files";
+import morgan from "morgan";
+import moment from "moment-timezone";
+import { config } from "dotenv";
+config();
 
 const app = express();
-const port = 2345;
+const port = process.env.PORT || 2345;
 
 // Thiết lập EJS và thư mục public
 morgan.token("vn-time", () => {
@@ -16,10 +18,10 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "..", "views"));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
-app.use((req, res, next) => {
-  const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const ip = req.ip as string;
   //chỉ log ipv4
-  let ipv4;
+  let ipv4: string;
   if (ip.includes(":")) {
     ipv4 = ip.split(":")[3];
   } else {
