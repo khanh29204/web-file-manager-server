@@ -13,7 +13,7 @@ const router = express.Router();
 // Route xử lý download file
 router.get("/download/*", (req, res) => {
   const decodedPath = decodeURIComponent(req.path);
-  const webFilePath = path.join(decodedPath.replace("/download", ""))
+  const webFilePath = path.join(decodedPath.replace("/download", ""));
 
   //chuyển hướng đến web khác với webFlePath
   res.redirect(`${domain}${webFilePath}`);
@@ -35,6 +35,10 @@ router.get("/", (req, res) => {
       const itemPath = path.join(directoryPath, item);
       const stat = fs.statSync(itemPath);
       let fileUrl;
+      // bỏ qua item bắt đầu bằng dấu .
+      if (item.startsWith(".")) {
+        return null;
+      }
 
       if (stat.isDirectory()) {
         fileUrl = path.join(currentDir, item);
@@ -49,7 +53,7 @@ router.get("/", (req, res) => {
         path: fileUrl,
         size: stat.isFile() ? formatFileSize(stat.size) : "",
       };
-    });
+    }).filter(item => item !== null);
 
     // Sắp xếp danh sách items
     itemsWithDetails.sort((a, b) => {
