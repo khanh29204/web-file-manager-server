@@ -8,6 +8,7 @@ config();
 
 const app = express();
 const port = process.env.PORT || 2345;
+app.set("trust proxy", true);
 
 // Thiết lập EJS và thư mục public
 morgan.token("vn-time", () => {
