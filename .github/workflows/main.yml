@@ -25,6 +25,6 @@ jobs:
           script: |
             cd /home/${{ secrets.SERVER_USERNAME }}/web-file-manager-server
             git pull
-            yarn install
-            yarn build
+            bun install
+            bun build
             pm2 restart 'web file'
