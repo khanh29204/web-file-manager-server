@@ -23,7 +23,7 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            cd /home/${{ secrets.SERVER_USERNAME }}/web-file-manager-server
+            cd ~/web-file-manager-server
             git pull
             bun install
             bun build
