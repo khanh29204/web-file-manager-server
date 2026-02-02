@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="vi">
   <head>
-    <title>
-      <%= currentDir === '.' || currentDir === '' ? 'Root' :
-      currentDir.split('/').pop() %>
-    </title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= currentDir ? currentDir.split('/').pop() : 'Root' %></title>
     <link rel="stylesheet" href="/style.css" />
     <link
       rel="stylesheet"
@@ -13,52 +12,99 @@
   </head>
 
   <body>
-    <h1>Danh sách File</h1>
-    <table style="width: 100%">
-      <thead>
-        <tr>
-          <th><a href="/?dir=<%= currentDir %>&sort=name">Tên</a></th>
-          <th><a href="/?dir=<%= currentDir %>&sort=type">Loại</a></th>
-          <th><a href="/?dir=<%= currentDir %>&sort=size">Kích thước</a></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% if (currentDir && currentDir !=='.' ) { %>
-        <tr>
-          <td>
-            <a href="/?dir=<%= parentDir %>" class="folder-icon">
-              <i class="fas fa-folder"></i> .. (Back)
-            </a>
-          </td>
-          <td></td>
-          <td></td>
-        </tr>
-        <% } %> <% items.forEach(item=> { %>
-        <tr>
-          <td>
-            <% if (item.isDirectory) { %>
-            <a
-              href="/?dir=<%= encodeURIComponent(item.path) %>&sort=<%= sortBy %>"
-              class="folder-icon"
-            >
-              <i class="fas fa-folder"></i>
-              <%= item.name.trim() %>
-            </a>
-            <% } else { %>
-            <a
-              href="<%= item.path %>"
-              class="file-icon"
-              data-type="<%= item.extension %>"
-            >
-              <%= item.name.trim() %>
-            </a>
-            <% } %>
-          </td>
-          <td><%= item.isDirectory ? "Folder" : "File" %></td>
-          <td><%= item.size %></td>
-        </tr>
-        <% }); %>
-      </tbody>
-    </table>
+    <div class="container">
+      <header>
+        <div class="breadcrumb">
+          <a href="/"><i class="fas fa-home"></i> Home</a>
+          <% breadcrumbs.forEach(crumb => { %>
+          <span>/</span>
+          <a href="/?dir=<%= encodeURIComponent(crumb.path) %>"
+            ><%= crumb.name %></a
+          >
+          <% }) %>
+        </div>
+        <h1>File Explorer</h1>
+      </header>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 45%">
+                <a href="<%= sortUrls.name %>">
+                  Tên <i class="fas <%= sortIcons.name %>"></i>
+                </a>
+              </th>
+              <th style="width: 20%">
+                <a href="<%= sortUrls.type %>">
+                  Loại <i class="fas <%= sortIcons.type %>"></i>
+                </a>
+              </th>
+              <th>
+                <a href="<%= sortUrls.size %>">
+                  Kích thước <i class="fas <%= sortIcons.size %>"></i>
+                </a>
+              </th>
+              <th>
+                <a href="<%= sortUrls.date %>">
+                  Ngày sửa <i class="fas <%= sortIcons.date %>"></i>
+                </a>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (currentDir && currentDir !== '') { %>
+            <tr>
+              <td colspan="4">
+                <div class="file-name">
+                  <i class="fas fa-level-up-alt text-secondary"></i>
+                  <a
+                    href="/?dir=<%= currentDir.split('/').slice(0, -1).join('/') %>"
+                    class="item-link"
+                    >... (Quay lại)</a
+                  >
+                </div>
+              </td>
+            </tr>
+            <% } %> <% if (items.length === 0) { %>
+            <tr>
+              <td colspan="4" style="text-align: center; padding: 40px">
+                <span class="text-muted">Thư mục trống</span>
+              </td>
+            </tr>
+            <% } %> <% items.forEach(item => { %>
+            <tr>
+              <td>
+                <div class="file-name">
+                  <i class="fas <%= item.icon %>"></i>
+                  <a
+                    href="<%= item.path %>"
+                    class="item-link"
+                    target="<%= item.isDirectory ? '_self' : '_blank' %>"
+                  >
+                    <%= item.name %>
+                  </a>
+                  <% if (!item.isDirectory) { %>
+                  <a
+                    href="<%= item.downloadPath %>"
+                    class="btn-icon"
+                    title="Tải về máy"
+                  >
+                    <i class="fas fa-download"></i>
+                  </a>
+                  <% } %>
+                </div>
+              </td>
+              <td class="text-sm" style="color: #4b5563"><%= item.type %></td>
+              <td class="text-sm"><%= item.size %></td>
+              <td class="text-sm">
+                <%= new Date(item.modified).toLocaleDateString('vi-VN') %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </body>
 </html>
