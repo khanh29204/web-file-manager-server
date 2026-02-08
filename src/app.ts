@@ -1,15 +1,15 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import path from "path";
 import fileRoutes from "./routes/files";
 import morgan from "morgan";
 import moment from "moment-timezone";
 import { config } from "dotenv";
-import { connectDB } from "./config/database";
+// import { connectDB } from "./config/database";
 
 config();
 
 // Kết nối Database
-connectDB();
+// connectDB();
 
 const app = express();
 const port = process.env.PORT || 2345;

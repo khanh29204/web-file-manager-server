@@ -7,7 +7,6 @@ import {
 } from "../utils/fileUtils";
 import path from "path";
 import { readdir, stat } from "fs/promises";
-import mime from "mime-types";
 import { config } from "dotenv";
 import FileRecord from "../models/FileRecord";
 
@@ -34,11 +33,11 @@ router.get("/file/*", async (req: Request, res: Response) => {
 
     // Ghi log lượt tải vào DB (Giữ nguyên logic của bạn)
     // Lưu ý: filePath trong DB nên lưu thống nhất (decoded) để dễ query
-    await FileRecord.findOneAndUpdate(
-      { filePath: rawPath }, // Lưu rawPath (decoded) để dễ quản lý
-      { $inc: { downloadCount: 1 }, lastDownloadedAt: new Date() },
-      { upsert: true, new: true }
-    );
+    // await FileRecord.findOneAndUpdate(
+    //   { filePath: rawPath }, // Lưu rawPath (decoded) để dễ quản lý
+    //   { $inc: { downloadCount: 1 }, lastDownloadedAt: new Date() },
+    //   { upsert: true, new: true }
+    // );
 
     // QUAN TRỌNG: Nếu user muốn download, nối thêm ?download=1 vào URL Nginx
     if (isDownload) {

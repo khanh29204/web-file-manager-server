@@ -25,6 +25,5 @@ jobs:
           script: |
             cd ~/web-file-manager-server
             git pull
-            bun install
-            bun build
+            bun install --frozen-lockfile
             pm2 restart 'web file'
