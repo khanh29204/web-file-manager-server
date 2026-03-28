@@ -9,6 +9,50 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
+    <style>
+      /* --- TỐI ƯU CỘT TÊN FILE --- */
+      .file-name {
+        display: flex;
+        align-items: center;
+        gap: 12px; /* Khoảng cách cố định giữa icon và phần chữ */
+      }
+
+      /* Ép tất cả icon có cùng một độ rộng để text luôn bắt đầu cùng một điểm */
+      .file-name > i.fas {
+        width: 16px;
+        text-align: center;
+      }
+
+      /* Nhóm tên và dung lượng thành 1 cột dọc */
+      .file-info-group {
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Nút download tự động đẩy sang góc phải */
+      .btn-download-wrapper {
+        margin-left: auto; 
+      }
+
+      /* --- XỬ LÝ ẨN/HIỆN THEO THIẾT BỊ --- */
+      .mobile-size {
+        display: none;
+        font-size: 12px;
+        color: #6b7280;
+        margin-top: 2px;
+      }
+
+      @media (max-width: 768px) {
+        /* Hiện dung lượng dưới tên file trên Mobile */
+        .mobile-size {
+          display: block;
+        }
+        /* Ẩn hoàn toàn cột "Kích thước" gốc trên Mobile */
+        .hide-size-mobile {
+          display: none;
+        }
+      }
+    </style>
   </head>
 
   <body>
@@ -40,7 +84,7 @@
                   Loại <i class="fas <%= sortIcons.type %>"></i>
                 </a>
               </th>
-              <th>
+              <th class="hide-size-mobile">
                 <a href="<%= sortUrls.size %>">
                   Kích thước <i class="fas <%= sortIcons.size %>"></i>
                 </a>
@@ -66,37 +110,50 @@
                 </div>
               </td>
             </tr>
-            <% } %> <% if (items.length === 0) { %>
+            <% } %> 
+            
+            <% if (items.length === 0) { %>
             <tr>
               <td colspan="4" style="text-align: center; padding: 40px">
                 <span class="text-muted">Thư mục trống</span>
               </td>
             </tr>
-            <% } %> <% items.forEach(item => { %>
+            <% } %> 
+            
+            <% items.forEach(item => { %>
             <tr>
               <td>
                 <div class="file-name">
                   <i class="fas <%= item.icon %>"></i>
-                  <a
-                    href="<%= item.path %>"
-                    class="item-link"
-                    target="<%= item.isDirectory ? '_self' : '_blank' %>"
-                  >
-                    <%= item.name %>
-                  </a>
+                  
+                  <div class="file-info-group">
+                    <a
+                      href="<%= item.path %>"
+                      class="item-link"
+                      target="<%= item.isDirectory ? '_self' : '_blank' %>"
+                    >
+                      <%= item.name %>
+                    </a>
+                    <div class="mobile-size"><%= item.size %></div>
+                  </div>
+
                   <% if (!item.isDirectory) { %>
-                  <a
-                    href="<%= item.downloadPath %>"
-                    class="btn-icon"
-                    title="Tải về máy"
-                  >
-                    <i class="fas fa-download"></i>
-                  </a>
+                  <div class="btn-download-wrapper">
+                    <a
+                      href="<%= item.downloadPath %>"
+                      class="btn-icon"
+                      title="Tải về máy"
+                    >
+                      <i class="fas fa-download"></i>
+                    </a>
+                  </div>
                   <% } %>
                 </div>
               </td>
               <td class="text-sm" style="color: #4b5563"><%= item.type %></td>
-              <td class="text-sm"><%= item.size %></td>
+              
+              <td class="text-sm hide-size-mobile"><%= item.size %></td>
+              
               <td class="text-sm">
                 <%= new Date(item.modified).toLocaleDateString('vi-VN') %>
               </td>
