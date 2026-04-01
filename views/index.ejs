@@ -156,7 +156,7 @@
               
               <td class="text-sm hide-size-mobile"><%= item.size %></td>
               
-              <td class="text-sm">
+              <td class="text-sm" id="item-date" data-time="<%= item.modified %>">
                 <%= new Date(item.modified).toLocaleDateString('vi-VN') %>
               </td>
             </tr>
@@ -166,4 +166,14 @@
       </div>
     </div>
   </body>
+  <script>
+  document.querySelectorAll('.item-date').forEach(el => {
+    const date = new Date(el.getAttribute('data-time'));
+    el.innerText = date.toLocaleDateString(undefined, { 
+      year: 'numeric', 
+      month: '2-digit', 
+      day: '2-digit' 
+    });
+  });
+</script>
 </html>
