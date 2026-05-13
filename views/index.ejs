@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= currentDir ? currentDir.split('/').pop() : 'Root' %></title>
+    <meta property="og:title" content="<%= currentDir ? currentDir.split('/').pop() : 'File Explorer' %>" />
+    <meta property="og:description" content="Danh sách file trong thư mục <%= currentDir || 'Root' %>. Nhấp để xem chi tiết và tải về." />
+    <meta property="og:url" content="https://file.quockhanh020924.id.vn/?dir=<%= encodeURIComponent(currentDir) %>" />
+    <meta property="og:type" content="website" />
     <link rel="stylesheet" href="/style.css" />
     <link
       rel="stylesheet"
@@ -156,7 +160,7 @@
               
               <td class="text-sm hide-size-mobile"><%= item.size %></td>
               
-              <td class="text-sm" id="item-date" data-time="<%= item.modified %>">
+              <td class="text-sm item-date" id="item-date" data-time="<%= item.modified %>">
                 <%= new Date(item.modified).toLocaleDateString('vi-VN') %>
               </td>
             </tr>

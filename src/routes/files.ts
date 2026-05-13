@@ -8,7 +8,6 @@ import {
 import path from "path";
 import { readdir, stat } from "fs/promises";
 import { config } from "dotenv";
-import FileRecord from "../models/FileRecord";
 
 config();
 
