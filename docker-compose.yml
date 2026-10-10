@@ -1,0 +1,13 @@
+services:
+  file-manager:
+    image: ghcr.io/khanh29204/web-file-manager-server:latest
+    container_name: file-manager
+    restart: unless-stopped
+    ports:
+      - "2345:2345"
+    environment:
+      - PORT=2345
+    env_file:
+      - .env
+    volumes:
+      - ./views:/app/drive
